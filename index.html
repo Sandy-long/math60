@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>趣味数学18 - 数表规律、最值问题与幻方</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 20px;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .rule {
+            background-color: #f1f9fe;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        .example {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 1px solid #e0e0e0;
+        }
+        .question {
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 12px 0 5px 0;
+        }
+        .answer {
+            color: #27ae60;
+            margin-left: 20px;
+            padding-left: 10px;
+            border-left: 2px solid #2ecc71;
+        }
+        
+        /* 数表规律动画 */
+        .table-pattern-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 50px);
+            grid-template-rows: repeat(3, 50px);
+            gap: 5px;
+        }
+        .table-cell {
+            background-color: #3498db;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            animation: tablePulse 2s infinite;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+        
+        /* 最值问题动画 */
+        .extreme-value-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .value-comparison {
+            display: flex;
+            align-items: flex-end;
+            height: 150px;
+        }
+        .value-bar {
+            width: 40px;
+            background-color: #e74c3c;
+            margin: 0 10px;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            animation: valueGrow 3s infinite;
+            animation-delay: calc(var(--delay) * 0.5s);
+        }
+        .value-bar::after {
+            content: attr(data-value);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+        }
+        
+        /* 幻方动画 */
+        .magic-square-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .magic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 50px);
+            grid-template-rows: repeat(3, 50px);
+            gap: 5px;
+            position: relative;
+        }
+        .magic-cell {
+            background-color: #9b59b6;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            animation: magicRotate 3s infinite;
+            animation-delay: calc(var(--delay) * 0.3s);
+        }
+        .magic-sum {
+            position: absolute;
+            bottom: 10px;
+            font-weight: bold;
+            color: #e74c3c;
+            animation: magicPulse 2s infinite;
+        }
+        
+        /* 动画关键帧 */
+        @keyframes tablePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        @keyframes valueGrow {
+            0%, 100% { height: var(--height); }
+            50% { height: calc(var(--height) + 20px); }
+        }
+        @keyframes magicRotate {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(5deg); }
+        }
+        @keyframes magicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* 罗伯法填数部分 - 完全按照图片样式设计 */
+        .rober-method-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .rober-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .number-box {
+            display: flex;
+            margin-right: 15px;
+        }
+        
+        .number-item {
+            width: 30px;
+            height: 30px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        
+        .rober-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .rober-animation-area {
+            height: 300px;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #666;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rober-magic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 5px;
+        }
+        
+        .rober-magic-cell {
+            background-color: #9b59b6;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .rober-magic-cell.start {
+            background-color: #e53935;
+        }
+        
+        .rober-magic-cell.highlight {
+            box-shadow: 0 0 10px 3px #ffeb3b;
+            transform: scale(1.05);
+        }
+        
+        .rober-magic-cell::after {
+            content: attr(data-step);
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .rober-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .rober-btn {
+            padding: 8px 15px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 80px;
+            transition: all 0.3s;
+        }
+        
+        .rober-btn:hover {
+            background-color: #1b5e20;
+        }
+        
+        .rober-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .rober-instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f1f9fe;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>趣味数学60</h1>
+    
+  
+    
+    <div class="section">
+        <h2>幻方</h2>
+        
+        <h3>1、三阶性质：幻和 = 中心数 × 3</h3>
+        <div class="magic-square-animation">
+            <div class="magic-grid">
+                <div class="magic-cell" style="--delay: 0">8</div>
+                <div class="magic-cell" style="--delay: 1">1</div>
+                <div class="magic-cell" style="--delay: 2">6</div>
+                <div class="magic-cell" style="--delay: 3">3</div>
+                <div class="magic-cell" style="--delay: 4; background-color: #e74c3c;">5</div>
+                <div class="magic-cell" style="--delay: 5">7</div>
+                <div class="magic-cell" style="--delay: 6">4</div>
+                <div class="magic-cell" style="--delay: 7">9</div>
+                <div class="magic-cell" style="--delay: 8">2</div>
+            </div>
+        </div>
+        
+        <div class="rule">
+            <strong>什么是幻方：</strong>是一个由不同的正整数填入的 正方形格子阵列（n × n），
+使得每一行、每一列、两条对角线的数字之和都相等。<hr>
+            <br><strong>什么是幻和：</strong>三阶幻方（3×3幻方） 是一个 3 行 3 列 的方阵，用 1~9 这9个不同的整数填入每个格子，
+使得：
+
+所有的 行、列、对角线 上的三个数之和都相等
+
+这个相等的数，就叫做幻和
+<hr>
+            <br><strong>运算法则：</strong>三阶幻方的幻和等于中心数乘以3
+        </div>
+        
+        <div class="example">
+            <div class="question">一个三阶幻方的幻和是 18，它的中心数是多少？</div>
+            <div class="answer">6</div>
+            
+            <div class="question">某一行的三个数为 4，6，10，能否出现在同一个三阶幻方的一行？</div>
+            <div class="answer">不能</div>
+            
+            <div class="question">三阶幻方中的一组行为：2，7，6，是否合理？求幻和、中心数。</div>
+            <div class="answer">15,5</div>
+        </div>
+        
+        <h3>2、填数规则：罗伯法填数</h3>
+    
+            
+            <div class="rober-animation-area">
+                <div class="rober-magic-grid" id="magicSquare">
+                    <!-- 3x3格子将由JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="rober-controls">
+                <button class="rober-btn" id="prevBtn">上一步</button>
+                <button class="rober-btn" id="nextBtn">下一步</button>
+                <button class="rober-btn" id="resetBtn">重置</button>
+                <button class="rober-btn" id="autoBtn">自动演示</button>
+            </div>
+            
+            <div class="rober-instructions">
+                <p><strong>罗伯法填数规则：</strong>从第一行中间格开始放"1"，每次向右上角移动，若遇到"出界"，则改为向正最下方填数。<br>若右上角已填数，则在原来位置的下方填数</p>
+            </div>
+        </div>
+        
+        <div class="example">
+            <div class="question">罗伯法填三阶幻方时，第一步"1"应填在________位置。</div>
+            <div class="answer"> 第一行中间格，即：(1,2)</div>
+            
+            <div class="question">将1~9按罗伯法填入3×3方格中，请问"5"应填在哪个格子？（用行列坐标回答）</div>
+            <div class="answer"> 第2行第2列（中心格）</div>
+            
+            <div class="question">按罗伯法填数，若第一步填在第一行最右边（非中间），会不会影响最终能否形成幻方？</div>
+            <div class="answer">会</div>
+        </div>
+        
+        <h3>3、对比求数：用幻和求缺失数</h3>
+        <div class="magic-square-animation">
+            <div class="magic-grid">
+                <div class="magic-cell" style="--delay: 0">8</div>
+                <div class="magic-cell" style="--delay: 1">1</div>
+                <div class="magic-cell" style="--delay: 2">6</div>
+                <div class="magic-cell" style="--delay: 3">3</div>
+                <div class="magic-cell" style="--delay: 4; background-color: #2ecc71;">?</div>
+                <div class="magic-cell" style="--delay: 5">7</div>
+                <div class="magic-cell" style="--delay: 6">4</div>
+                <div class="magic-cell" style="--delay: 7">9</div>
+                <div class="magic-cell" style="--delay: 8">2</div>
+            </div>
+        </div>
+        
+        <div class="rule">
+            <strong>运算法则：</strong>利用幻和与已知数求缺失的数字
+        </div>
+        
+        <div class="example">
+            <div class="question">一个三阶幻方中，第一列数字为：8、1、？，幻和为 15。求第三个数。</div>
+            <div class="answer">6</div>
+            
+            <div class="question">三阶幻方中一行的数为 A、B、5，且幻和为 15。 如果 A 比 B 小 2，求 A 与 B 的值。</div>
+            <div class="answer">A4，B6</div>
+            
+            <div class="question">一行三格为：x，x+1，x+2，构成三阶幻方一行，问 x 是多少？</div>
+            <div class="answer">4</div>
+        </div>
+    </div>
+
+    <script>
+        // 罗伯法填数动图的JavaScript代码
+        const magicSquare = document.getElementById('magicSquare');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        
+        const size = 3;
+        let currentStep = 0;
+        let autoPlayInterval = null;
+        const steps = [];
+        
+        // 初始化幻方格子
+        function initMagicSquare() {
+            magicSquare.innerHTML = '';
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'rober-magic-cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    magicSquare.appendChild(cell);
+                }
+            }
+        }
+        
+        // 生成罗伯法填数步骤
+        function generateSteps() {
+            const n = 3;
+            const square = Array(n).fill().map(() => Array(n).fill(0));
+            steps.length = 0;
+            
+            let i = 0, j = Math.floor(n / 2);  // 起始位置：第一行中间
+            let step = 1;
+            
+            while (step <= n * n) {
+                // 保存当前步骤
+                const snapshot = JSON.parse(JSON.stringify(square));
+                snapshot[i][j] = step;
+                steps.push({
+                    square: snapshot,
+                    currentPos: {i, j},
+                    step: step
+                });
+                
+                square[i][j] = step;
+                
+                // 计算下一个位置
+                let next_i = (i - 1 + n) % n;
+                let next_j = (j + 1) % n;
+                
+                // 检查是否已被占用
+                if (square[next_i][next_j]) {
+                    i = (i + 1) % n;  // 向下移动
+                } else {
+                    i = next_i;
+                    j = next_j;
+                }
+                
+                step++;
+            }
+        }
+        
+        // 显示当前步骤
+        function showStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= steps.length) return;
+            
+            const step = steps[stepIndex];
+            const cells = document.querySelectorAll('.rober-magic-cell');
+            
+            // 重置所有格子
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.className = 'rober-magic-cell';
+                cell.removeAttribute('data-step');
+            });
+            
+            // 填充当前步骤的数字
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    const value = step.square[i][j];
+                    const index = i * size + j;
+                    if (value > 0) {
+                        cells[index].textContent = value;
+                        cells[index].setAttribute('data-step', `步${value}`);
+                        
+                        if (value === step.step) {
+                            cells[index].classList.add('highlight');
+                        }
+                        
+                        if (value === 1) {
+                            cells[index].classList.add('start');
+                        }
+                    }
+                }
+            }
+            
+            currentStep = stepIndex;
+            updateButtons();
+        }
+        
+        // 更新按钮状态
+        function updateButtons() {
+            prevBtn.disabled = currentStep <= 0;
+            nextBtn.disabled = currentStep >= steps.length - 1;
+        }
+        
+        // 自动演示
+        function autoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+                autoBtn.textContent = '自动演示';
+                return;
+            }
+            
+            autoBtn.textContent = '停止演示';
+            showStep(0);
+            
+            autoPlayInterval = setInterval(() => {
+                if (currentStep < steps.length - 1) {
+                    showStep(currentStep + 1);
+                } else {
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = null;
+                    autoBtn.textContent = '自动演示';
+                }
+            }, 1000);
+        }
+        
+        // 初始化
+        initMagicSquare();
+        generateSteps();
+        showStep(0);
+        
+        // 事件监听
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                showStep(currentStep - 1);
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                showStep(currentStep + 1);
+            }
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+                autoBtn.textContent = '自动演示';
+            }
+            showStep(0);
+        });
+        
+        autoBtn.addEventListener('click', autoPlay);
+    </script>
+</body>
+</html>
