@@ -57,11 +57,44 @@
             color: #e74c3c;
             margin: 12px 0 5px 0;
         }
+        .answer-container {
+            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+            border: 1px solid #d1fae5;
+            border-radius: 8px;
+            padding: 5px 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .answer-container:hover {
+            background: linear-gradient(135deg, #dcffe4 0%, #c6f6d5 100%);
+            transform: translateX(5px);
+        }
+        .answer-prompt {
+            color: #10b981;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .answer-prompt:before {
+            content: "✨";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
         .answer {
-            color: #27ae60;
+            color: #0f9d58;
             margin-left: 20px;
-            padding-left: 10px;
-            border-left: 2px solid #2ecc71;
+            padding: 10px 15px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid #10b981;
+            border-radius: 0 8px 8px 0;
+            display: none;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+        .show-answer .answer {
+            display: block;
         }
         
         /* 数表规律动画 */
@@ -190,8 +223,12 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
-        /* 罗伯法填数部分 - 完全按照图片样式设计 */
+        /* 罗伯法填数部分 */
         .rober-method-container {
             background-color: white;
             padding: 20px;
@@ -321,7 +358,7 @@
     </style>
 </head>
 <body>
-    <h1>趣味数学60</h1>
+    <h1>趣味数学18</h1>
     
   
     
@@ -358,17 +395,40 @@
         
         <div class="example">
             <div class="question">一个三阶幻方的幻和是 18，它的中心数是多少？</div>
-            <div class="answer">6</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">6</div>
+            </div>
             
             <div class="question">某一行的三个数为 4，6，10，能否出现在同一个三阶幻方的一行？</div>
-            <div class="answer">不能</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">不能</div>
+            </div>
             
             <div class="question">三阶幻方中的一组行为：2，7，6，是否合理？求幻和、中心数。</div>
-            <div class="answer">15,5</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">15,5</div>
+            </div>
         </div>
         
         <h3>2、填数规则：罗伯法填数</h3>
-    
+        <div class="rober-method-container">
+            <div class="rober-header">
+                <div class="number-box">
+                    <div class="number-item">1</div>
+                    <div class="number-item">2</div>
+                    <div class="number-item">3</div>
+                    <div class="number-item">4</div>
+                    <div class="number-item">5</div>
+                    <div class="number-item">6</div>
+                    <div class="number-item">7</div>
+                    <div class="number-item">8</div>
+                    <div class="number-item">9</div>
+                </div>
+                <div class="rober-title">罗伯法填数步骤</div>
+            </div>
             
             <div class="rober-animation-area">
                 <div class="rober-magic-grid" id="magicSquare">
@@ -390,13 +450,22 @@
         
         <div class="example">
             <div class="question">罗伯法填三阶幻方时，第一步"1"应填在________位置。</div>
-            <div class="answer"> 第一行中间格，即：(1,2)</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">第一行中间格，即：(1,2)</div>
+            </div>
             
             <div class="question">将1~9按罗伯法填入3×3方格中，请问"5"应填在哪个格子？（用行列坐标回答）</div>
-            <div class="answer"> 第2行第2列（中心格）</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">第2行第2列（中心格）</div>
+            </div>
             
             <div class="question">按罗伯法填数，若第一步填在第一行最右边（非中间），会不会影响最终能否形成幻方？</div>
-            <div class="answer">会</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">会</div>
+            </div>
         </div>
         
         <h3>3、对比求数：用幻和求缺失数</h3>
@@ -420,13 +489,22 @@
         
         <div class="example">
             <div class="question">一个三阶幻方中，第一列数字为：8、1、？，幻和为 15。求第三个数。</div>
-            <div class="answer">6</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">6</div>
+            </div>
             
             <div class="question">三阶幻方中一行的数为 A、B、5，且幻和为 15。 如果 A 比 B 小 2，求 A 与 B 的值。</div>
-            <div class="answer">A4，B6</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">A4，B6</div>
+            </div>
             
             <div class="question">一行三格为：x，x+1，x+2，构成三阶幻方一行，问 x 是多少？</div>
-            <div class="answer">4</div>
+            <div class="answer-container">
+                <div class="answer-prompt">点击显示答案</div>
+                <div class="answer">4</div>
+            </div>
         </div>
     </div>
 
@@ -589,6 +667,16 @@
         });
         
         autoBtn.addEventListener('click', autoPlay);
+
+        // 答案显示功能
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                const container = e.target.closest('.answer-container');
+                if(container) {
+                    container.classList.toggle('show-answer');
+                }
+            });
+        });
     </script>
 </body>
 </html>
